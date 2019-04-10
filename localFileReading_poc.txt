@@ -1,0 +1,30 @@
+Add: 
+  <label for="output2"> </label><input type="textbox" name="output2">
+  <input type="file" id="myFile">
+  <hr>
+  <textarea style="width:500px;height: 400px" id="output"></textarea>
+to html after Next Button
+
+Add: 
+var input = document.getElementById("myFile");
+var output = document.getElementById("output");
+var reader = new FileReader();
+var words = "potato";
+
+  input.addEventListener("change", function () {
+    if (this.files && this.files[0]) {
+      var myFile = this.files[0];
+    
+      reader.addEventListener('load', function (e) {
+        words = e.target.result;
+        output.textContent = words;
+
+      });
+      reader.readAsText(input.files[0]);
+    }   
+  });
+to JS.
+
+Add: 
+          document.getElementsByName('output2')[0].value=words;
+to $scope.next
