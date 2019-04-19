@@ -1,1 +1,69 @@
-<h1>Hello world!</h1>
+<html ng-app='app'>
+<head>
+  <meta name="description" content="AngularJs solution for Conway's Game of Life - http://en.wikipedia.org/wiki/Conway's_Game_of_Life" />
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/slate/bootstrap.min.css" />
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+</head>
+<body>
+  <div class="container" ng-controller='GameController as vm'>
+    <div class="page-header text-center">
+      <h1>
+        <span class="text-muted">Conway's</span> Game of Life
+      </h1>
+    </div>
+    <div>
+      <div class="buttons-container">
+        <button class="btn btn-primary"
+                ng-disabled="!vm.thumbs.length"
+                ng-click="vm.reset()">
+          NEW
+        </button>
+        <button class="btn btn-success"
+                ng-click="vm.save()">
+          SAVE
+        </button>
+        <button class='btn btn-default'
+                ng-show="!vm.isStarted"
+                ng-click="vm.life.next()">
+          NEXT
+        </button>
+        <label for="autoplay" class="btn btn-default">
+          <input id="autoplay" type="checkbox" 
+                 ng-model="vm.isStarted"
+                 ng-change="vm.togglePlay()"> Autoplay
+        </label>  
+      </div>
+    </div>
+    <table class='grid'>
+      <tr ng-repeat="row in vm.board">
+        <td ng-repeat="cell in row"
+            ng-class="{'alive':cell.isAlive}"
+            ng-click="cell.toggle()">
+        </td>
+      </tr>
+    </table>
+    <div class="thumbs-container">
+      <div class="thumb-container"
+           ng-repeat="thumb in vm.thumbs">
+        <div>
+          <table class="grid-thumb" 
+                 ng-click="vm.load(thumb)">
+            <tr ng-repeat="row in thumb">
+              <td ng-repeat="cell in row"
+                  ng-class="{'alive':cell.isAlive}">
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="icon-close-thumb" ng-click="vm.thumbs.splice($index,1)">
+          <i class="fa fa-trash"></i>
+          <span class='text-small'>delete</span>
+        </div>
+      </div>
+    </div>
+  </div>  
+</body>
+</html>
