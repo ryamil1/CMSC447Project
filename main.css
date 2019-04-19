@@ -1,33 +1,37 @@
-.text-center{
-  text-align: center;  
+.text-center {
+  text-align: center;
 }
 
-.grid{
+.grid {
   margin: auto;
   border-spacing: 0;
   border: solid 2px #111;
-  tr{
-    td{
-      &.alive{
+
+  tr {
+    td {
+      &.alive {
         background: #fff;
       }
-      &:hover{
-        cursor:pointer;
+
+      &:hover {
+        cursor: pointer;
       }
+
       margin: 0;
       padding: 0;
       border: solid 1px #111;
       width: 22px;
-      height: 22px; 
+      height: 22px;
     }
   }
-  
-  &-thumb{
-    tr{
-      td{
-        height:3px;
-        width:3px;
-        &.alive{
+
+  &-thumb {
+    tr {
+      td {
+        height: 3px;
+        width: 3px;
+
+        &.alive {
           background: #fff;
         }
       }
@@ -35,42 +39,43 @@
   }
 }
 
-.buttons-container{
+.buttons-container {
   text-align: center;
   margin: 20px auto;
 }
 
-.thumbs-container{
+.thumbs-container {
   margin: 15px auto;
   width: 357px;
 }
 
-.thumb-container{
+.thumb-container {
   border: solid 1px #6f6;
-  display:inline-block;
+  display: inline-block;
   height: 47px;
   width: 47px;
   margin: 0 2px;
   overflow: hidden;
-  
-  .icon-close-thumb{
+
+  .icon-close-thumb {
     position: relative;
     top: 0;
     font-size: 12px;
     padding: 2px;
     color: #c33;
-    background: rgba(400,400,400,0.9);
+    background: rgba(400, 400, 400, 0.9);
     height: 25px;
     transition: 0.5s;
     cursor: pointer;
-    .text-small{
+
+    .text-small {
       font-size: 10px;
     }
   }
-  
-  &:hover{
-    .icon-close-thumb{
+
+  &:hover {
+    .icon-close-thumb {
       top: -20px;
-    }    
+    }
   }
 }
