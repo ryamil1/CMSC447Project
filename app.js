@@ -23,16 +23,21 @@
           var myFile = this.files[0];
     
           reader.addEventListener('load', function (e) {
+			var newBoard = board.createNew($scope.h, $scope.w)
             words = e.target.result;
             words = words.split('\n');
             words.forEach(function(pair) {
               var word = pair.split(',');
               var x = parseInt(word[0], 10);
               var y = parseInt(word[1], 10);
-              window.initialSeed[x][y]["isAlive"] = true;
+              if ($scope.h > x + 1 && $scope.w > y + 1) {
+				newBoard[x][y]["isAlive"] = true;
+			  } else {
+				//Error message here.
+			  }
               $scope.cellsAlive++;
             });
-            vm.life = life.createNew(window.initialSeed,$scope.survive1,$scope.survive2,$scope.revive);
+            vm.life = life.createNew(newBoard,$scope.survive1,$scope.survive2,$scope.revive);
             vm.board = vm.life.board;
         
           });
