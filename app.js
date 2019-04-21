@@ -94,7 +94,7 @@
       }
       
       function reset(){
-        if(vm.isStarted) vm.togglePlay();
+//        if(vm.isStarted) vm.togglePlay();
         $scope.gridColor = '#ffffff';
         $scope.iteration=10;
         num=$scope.iteration;
