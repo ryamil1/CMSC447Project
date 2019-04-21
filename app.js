@@ -33,7 +33,6 @@
             });
             vm.life = life.createNew(window.initialSeed,$scope.survive1,$scope.survive2,$scope.revive);
             vm.board = vm.life.board;
-            vm.togglePlay();
         
           });
           reader.readAsText(input.files[0]);
@@ -65,6 +64,7 @@
         }
         vm.isStarted = true;
         vm.timer = $interval(function(){$scope.iterationCount++; $scope.cellsAlive=vm.life.next($scope.cellsAlive);num--}, $scope.time, num);
+        vm.isStarted = false;
       }
       
       
