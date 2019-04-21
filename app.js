@@ -16,30 +16,41 @@
       var input = document.getElementById("myFile");
       var output = document.getElementById("output");
       var reader = new FileReader();
-      var words = "potato";
+      var words = "";
 
       input.addEventListener("change", function () {
         if (this.files && this.files[0]) {
           var myFile = this.files[0];
-    
+        
           reader.addEventListener('load', function (e) {
-			var newBoard = board.createNew($scope.h, $scope.w)
+            //Make new board, change display conditions, stop stuff.
+		      	var newBoard = board.createNew($scope.h, $scope.w);
+		      	vm.isStarted = false;
+		      	$scope.iterationCount = 0;
+		      	$scope.cellsAlive = 0;
+
+            //Get results from the reader
             words = e.target.result;
             words = words.split('\n');
+            
+            //For each line, parse as ints.
             words.forEach(function(pair) {
               var word = pair.split(',');
               var x = parseInt(word[0], 10);
               var y = parseInt(word[1], 10);
+              
+              //If out of bounds of the grid, abort.
               if ($scope.h > x + 1 && $scope.w > y + 1) {
-				newBoard[x][y]["isAlive"] = true;
-			  } else {
-				//Error message here.
-			  }
+			        	newBoard[x][y]["isAlive"] = true;
+		      	  } else {
+			      	//Error message here.
+			        }
               $scope.cellsAlive++;
             });
             vm.life = life.createNew(newBoard,$scope.survive1,$scope.survive2,$scope.revive);
             vm.board = vm.life.board;
-        
+// >>>>>>>>>>>>>> Board refresh should go here <<<<<<<<<<<<<<<<<<<<<<
+
           });
           reader.readAsText(input.files[0]);
         }   
@@ -63,6 +74,7 @@
       $scope.survive2=3;
       $scope.revive=3;
       var changeFlag = 0;
+      
       function togglePlay(){
         if(!vm.isStarted && vm.timer){ 
           $interval.cancel(vm.timer);
@@ -71,17 +83,22 @@
         }
         var num = $scope.iteration;
         vm.isStarted = true;
+        //Expanded this to be more readable.
         vm.timer = $interval(function(){
-          $scope.iterationCount++; 
-          var alive = vm.life.next($scope.cellsAlive);
-          if(alive != -1){
-            $scope.cellsAlive = alive
-          } else {
-            $interval.cancel(vm.timer)
+          //Kills it if it shouldn't be running.
+          if(!vm.isStarted){
+            return;
           }
-          num--
+          $scope.iterationCount++;
+          var alive = vm.life.next($scope.cellsAlive);
+          //Next now returns -1 if it hasn't changed anything.
+          if(alive != -1){
+            $scope.cellsAlive = alive;
+          } else {
+            $interval.cancel(vm.timer);
+          }
+          num--;
         }, $scope.time, num);
-        vm.isStarted = false;
       }
       
       
@@ -101,7 +118,6 @@
       function reset(){
 //        if(vm.isStarted) vm.togglePlay();
         $scope.gridColor = '#ffffff';
-        $scope.iteration=10;
         num=$scope.iteration;
         $scope.cellColor = '#000000';
         $scope.iterationCount= 0;
@@ -248,7 +264,3 @@
   }   
   
 }());
-
-
-          
-  window.initialSeed = [[{"position":{"y":0,"x":0}},{"position":{"y":0,"x":1}},{"position":{"y":0,"x":2}},{"position":{"y":0,"x":3}},{"position":{"y":0,"x":4}},{"position":{"y":0,"x":5}},{"position":{"y":0,"x":6}},{"position":{"y":0,"x":7}},{"position":{"y":0,"x":8}},{"position":{"y":0,"x":9}},{"position":{"y":0,"x":10}},{"position":{"y":0,"x":11}},{"position":{"y":0,"x":12}},{"position":{"y":0,"x":13}},{"position":{"y":0,"x":14}}],[{"position":{"y":1,"x":0}},{"position":{"y":1,"x":1}},{"position":{"y":1,"x":2}},{"position":{"y":1,"x":3}},{"position":{"y":1,"x":4}},{"position":{"y":1,"x":5}},{"position":{"y":1,"x":6}},{"position":{"y":1,"x":7}},{"position":{"y":1,"x":8}},{"position":{"y":1,"x":9}},{"position":{"y":1,"x":10}},{"position":{"y":1,"x":11}},{"position":{"y":1,"x":12}},{"position":{"y":1,"x":13}},{"position":{"y":1,"x":14}}],[{"position":{"y":2,"x":0}},{"position":{"y":2,"x":1}},{"position":{"y":2,"x":2}},{"position":{"y":2,"x":3}},{"position":{"y":2,"x":4}},{"position":{"y":2,"x":5}},{"position":{"y":2,"x":6}},{"position":{"y":2,"x":7}},{"position":{"y":2,"x":8}},{"position":{"y":2,"x":9}},{"position":{"y":2,"x":10}},{"position":{"y":2,"x":11}},{"position":{"y":2,"x":12}},{"position":{"y":2,"x":13}},{"position":{"y":2,"x":14}}],[{"position":{"y":3,"x":0}},{"position":{"y":3,"x":1}},{"position":{"y":3,"x":2}},{"position":{"y":3,"x":3}},{"position":{"y":3,"x":4}},{"position":{"y":3,"x":5}},{"position":{"y":3,"x":6}},{"position":{"y":3,"x":7}},{"position":{"y":3,"x":8}},{"position":{"y":3,"x":9}},{"position":{"y":3,"x":10}},{"position":{"y":3,"x":11}},{"position":{"y":3,"x":12}},{"position":{"y":3,"x":13}},{"position":{"y":3,"x":14}}],[{"position":{"y":4,"x":0}},{"position":{"y":4,"x":1}},{"position":{"y":4,"x":2}},{"position":{"y":4,"x":3}},{"position":{"y":4,"x":4}},{"position":{"y":4,"x":5}},{"position":{"y":4,"x":6}},{"position":{"y":4,"x":7}},{"position":{"y":4,"x":8}},{"position":{"y":4,"x":9}},{"position":{"y":4,"x":10}},{"position":{"y":4,"x":11}},{"position":{"y":4,"x":12}},{"position":{"y":4,"x":13}},{"position":{"y":4,"x":14}}],[{"position":{"y":5,"x":0}},{"position":{"y":5,"x":1}},{"position":{"y":5,"x":2}},{"position":{"y":5,"x":3}},{"position":{"y":5,"x":4}},{"position":{"y":5,"x":5}},{"position":{"y":5,"x":6}},{"position":{"y":5,"x":7}},{"position":{"y":5,"x":8}},{"position":{"y":5,"x":9}},{"position":{"y":5,"x":10}},{"position":{"y":5,"x":11}},{"position":{"y":5,"x":12}},{"position":{"y":5,"x":13}},{"position":{"y":5,"x":14}}],[{"position":{"y":6,"x":0}},{"position":{"y":6,"x":1}},{"position":{"y":6,"x":2}},{"position":{"y":6,"x":3}},{"position":{"y":6,"x":4}},{"position":{"y":6,"x":5}},{"position":{"y":6,"x":6}},{"position":{"y":6,"x":7}},{"position":{"y":6,"x":8}},{"position":{"y":6,"x":9}},{"position":{"y":6,"x":10}},{"position":{"y":6,"x":11}},{"position":{"y":6,"x":12}},{"position":{"y":6,"x":13}},{"position":{"y":6,"x":14}}],[{"position":{"y":7,"x":0}},{"position":{"y":7,"x":1}},{"position":{"y":7,"x":2}},{"position":{"y":7,"x":3}},{"position":{"y":7,"x":4}},{"position":{"y":7,"x":5}},{"position":{"y":7,"x":6}},{"position":{"y":7,"x":7}},{"position":{"y":7,"x":8}},{"position":{"y":7,"x":9}},{"position":{"y":7,"x":10}},{"position":{"y":7,"x":11}},{"position":{"y":7,"x":12}},{"position":{"y":7,"x":13}},{"position":{"y":7,"x":14}}],[{"position":{"y":8,"x":0}},{"position":{"y":8,"x":1}},{"position":{"y":8,"x":2}},{"position":{"y":8,"x":3}},{"position":{"y":8,"x":4}},{"position":{"y":8,"x":5}},{"position":{"y":8,"x":6}},{"position":{"y":8,"x":7}},{"position":{"y":8,"x":8}},{"position":{"y":8,"x":9}},{"position":{"y":8,"x":10}},{"position":{"y":8,"x":11}},{"position":{"y":8,"x":12}},{"position":{"y":8,"x":13}},{"position":{"y":8,"x":14}}],[{"position":{"y":9,"x":0}},{"position":{"y":9,"x":1}},{"position":{"y":9,"x":2}},{"position":{"y":9,"x":3}},{"position":{"y":9,"x":4}},{"position":{"y":9,"x":5}},{"position":{"y":9,"x":6}},{"position":{"y":9,"x":7}},{"position":{"y":9,"x":8}},{"position":{"y":9,"x":9}},{"position":{"y":9,"x":10}},{"position":{"y":9,"x":11}},{"position":{"y":9,"x":12}},{"position":{"y":9,"x":13}},{"position":{"y":9,"x":14}}],[{"position":{"y":10,"x":0}},{"position":{"y":10,"x":1}},{"position":{"y":10,"x":2}},{"position":{"y":10,"x":3}},{"position":{"y":10,"x":4}},{"position":{"y":10,"x":5}},{"position":{"y":10,"x":6}},{"position":{"y":10,"x":7}},{"position":{"y":10,"x":8}},{"position":{"y":10,"x":9}},{"position":{"y":10,"x":10}},{"position":{"y":10,"x":11}},{"position":{"y":10,"x":12}},{"position":{"y":10,"x":13}},{"position":{"y":10,"x":14}}],[{"position":{"y":11,"x":0}},{"position":{"y":11,"x":1}},{"position":{"y":11,"x":2}},{"position":{"y":11,"x":3}},{"position":{"y":11,"x":4}},{"position":{"y":11,"x":5}},{"position":{"y":11,"x":6}},{"position":{"y":11,"x":7}},{"position":{"y":11,"x":8}},{"position":{"y":11,"x":9}},{"position":{"y":11,"x":10}},{"position":{"y":11,"x":11}},{"position":{"y":11,"x":12}},{"position":{"y":11,"x":13}},{"position":{"y":11,"x":14}}],[{"position":{"y":12,"x":0}},{"position":{"y":12,"x":1}},{"position":{"y":12,"x":2}},{"position":{"y":12,"x":3}},{"position":{"y":12,"x":4}},{"position":{"y":12,"x":5}},{"position":{"y":12,"x":6}},{"position":{"y":12,"x":7}},{"position":{"y":12,"x":8}},{"position":{"y":12,"x":9}},{"position":{"y":12,"x":10}},{"position":{"y":12,"x":11}},{"position":{"y":12,"x":12}},{"position":{"y":12,"x":13}},{"position":{"y":12,"x":14}}],[{"position":{"y":13,"x":0}},{"position":{"y":13,"x":1}},{"position":{"y":13,"x":2}},{"position":{"y":13,"x":3}},{"position":{"y":13,"x":4}},{"position":{"y":13,"x":5}},{"position":{"y":13,"x":6}},{"position":{"y":13,"x":7}},{"position":{"y":13,"x":8}},{"position":{"y":13,"x":9}},{"position":{"y":13,"x":10}},{"position":{"y":13,"x":11}},{"position":{"y":13,"x":12}},{"position":{"y":13,"x":13}},{"position":{"y":13,"x":14}}],[{"position":{"y":14,"x":0}},{"position":{"y":14,"x":1}},{"position":{"y":14,"x":2}},{"position":{"y":14,"x":3}},{"position":{"y":14,"x":4}},{"position":{"y":14,"x":5}},{"position":{"y":14,"x":6}},{"position":{"y":14,"x":7}},{"position":{"y":14,"x":8}},{"position":{"y":14,"x":9}},{"position":{"y":14,"x":10}},{"position":{"y":14,"x":11}},{"position":{"y":14,"x":12}},{"position":{"y":14,"x":13}},{"position":{"y":14,"x":14}}]];
