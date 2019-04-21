@@ -30,6 +30,7 @@
               var x = parseInt(word[0], 10);
               var y = parseInt(word[1], 10);
               window.initialSeed[x][y]["isAlive"] = true;
+              $scope.cellsAlive++;
             });
             vm.life = life.createNew(window.initialSeed,$scope.survive1,$scope.survive2,$scope.revive);
             vm.board = vm.life.board;
@@ -56,15 +57,25 @@
       $scope.survive1=2;
       $scope.survive2=3;
       $scope.revive=3;
+      var changeFlag = 0;
       function togglePlay(){
         if(!vm.isStarted && vm.timer){ 
           $interval.cancel(vm.timer);
           vm.isStarted = false;
           return;
         }
-        num = $scope.iteration;
+        var num = $scope.iteration;
         vm.isStarted = true;
-        vm.timer = $interval(function(){$scope.iterationCount++; $scope.cellsAlive=vm.life.next($scope.cellsAlive);num--}, $scope.time, num);
+        vm.timer = $interval(function(){
+          $scope.iterationCount++; 
+          var alive = vm.life.next($scope.cellsAlive);
+          if(alive != -1){
+            $scope.cellsAlive = alive
+          } else {
+            $interval.cancel(vm.timer)
+          }
+          num--
+        }, $scope.time, num);
         vm.isStarted = false;
       }
       
@@ -110,10 +121,6 @@
     app.factory('cell', cell);
     app.factory('board', board);
     app.factory('life', life);
-    
-    
-    
-  
     
     function cell(){
       return{
@@ -200,6 +207,7 @@
         }
         
         function next(alive){
+          var changeFlag = 0;
           previousBoard = angular.copy(board);
           alive=0;
           for (var y = 0; y < height; y++) {
@@ -216,13 +224,18 @@
               board[y][x] = newCellState(previousBoard, x, y);
               if(!curr && board[y][x].isAlive)
               {
+                changeFlag = 1;
                 alive++;
               }
               else if(curr && !board[y][x].isAlive)
               {
+                changeFlag = 1;
                 alive--;
               }
           }
+        }
+        if(!changeFlag){
+          return -1;
         }
         return alive;
       }
