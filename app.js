@@ -62,6 +62,7 @@
           vm.isStarted = false;
           return;
         }
+        num = $scope.iteration;
         vm.isStarted = true;
         vm.timer = $interval(function(){$scope.iterationCount++; $scope.cellsAlive=vm.life.next($scope.cellsAlive);num--}, $scope.time, num);
         vm.isStarted = false;
