@@ -14,10 +14,10 @@
       var vm = this;
       
       var input = document.getElementById("myFile");
-      var output = document.getElementById("output");
       var reader = new FileReader();
       var words = "";
 
+      //Listener for file upload button.
       input.addEventListener("change", function () {
         if (this.files && this.files[0]) {
           var myFile = this.files[0];
@@ -28,6 +28,7 @@
 		      	vm.isStarted = false;
 		      	$scope.iterationCount = 0;
 		      	$scope.cellsAlive = 0;
+		      	var tooManyCoords = 0;
 
             //Get results from the reader
             words = e.target.result;
@@ -36,8 +37,19 @@
             //For each line, parse as ints.
             words.forEach(function(pair) {
               var word = pair.split(',');
+              if(word.length > 2){
+                //>>>>Error message<<<<
+                tooManyCoords = 1;
+                return;
+              }
               var x = parseInt(word[0], 10);
               var y = parseInt(word[1], 10);
+              
+              if(isNaN(x) || isNaN(y)) {
+                //>>>>Error message<<<<
+                console.log(word[0] + " " + word[1]);
+                return;
+              }
               
               //If out of bounds of the grid, abort.
               if ($scope.h > x + 1 && $scope.w > y + 1) {
@@ -47,10 +59,13 @@
 			        }
               $scope.cellsAlive++;
             });
-            vm.life = life.createNew(newBoard,$scope.survive1,$scope.survive2,$scope.revive);
-            vm.board = vm.life.board;
-// >>>>>>>>>>>>>> Board refresh should go here <<<<<<<<<<<<<<<<<<<<<<
-
+            if(tooManyCoords){
+              reset();
+            } else {
+              vm.life = life.createNew(newBoard,$scope.survive1,$scope.survive2,$scope.revive);
+              vm.board = vm.life.board;
+              // >>>>>>>>>>>>>> Board refresh should go here <<<<<<<<<<<<<<<<<<<<<<
+            }
           });
           reader.readAsText(input.files[0]);
         }   
@@ -74,6 +89,7 @@
       $scope.survive2=3;
       $scope.revive=3;
       var changeFlag = 0;
+      var alive = 0;
       
       function togglePlay(){
         if(!vm.isStarted && vm.timer){ 
@@ -81,7 +97,10 @@
           vm.isStarted = false;
           return;
         }
+        var grandparent;
+        var parent;
         var num = $scope.iteration;
+        var stableDetected = 0;
         vm.isStarted = true;
         //Expanded this to be more readable.
         vm.timer = $interval(function(){
@@ -90,9 +109,19 @@
             return;
           }
           $scope.iterationCount++;
-          var alive = vm.life.next($scope.cellsAlive);
+          if($scope.iterationCount > 1) {
+            grandparent = angular.copy(parent);
+          }
+          parent = angular.copy(vm.life.board);
+          
+          alive = vm.life.next($scope.cellsAlive);
+          
+          if($scope.iterationCount > 1){
+            stableDetected = compare(grandparent, vm.life.board);
+          }
+
           //Next now returns -1 if it hasn't changed anything.
-          if(alive != -1){
+          if(alive != -1 && !stableDetected){
             $scope.cellsAlive = alive;
           } else {
             $interval.cancel(vm.timer);
@@ -101,7 +130,29 @@
         }, $scope.time, num);
       }
       
-      
+      function compare(grandparent, child){
+        if(grandparent.length != child.length){
+          return 2;
+        }
+        if(grandparent[0].length != child[0].length){
+          return 2;
+        }
+        
+        var i, j, c, g;
+        for(i = 0; i < grandparent.length; i++){
+          for(j = 0; j < grandparent[i].length; j++){
+            c = child[i][j].hasOwnProperty("isAlive");
+            g = grandparent[i][j].hasOwnProperty("isAlive");
+            
+            if( ((c && g) && 
+                 grandparent[i][j].isAlive != child[i][j].isAlive) || 
+                 (c != g)){
+              return 0;
+            }
+          }
+        }
+        return 1;
+      }
       
       function save(){
         var board = angular.copy(vm.board);
@@ -222,7 +273,7 @@
           var newCell = cell.createNew(oldCell.position, {isAlive: oldCell.isAlive});
           var neighbors = newCell.getAliveNeighbors(previousBoard);
           
-          newCell.isAlive = newCell.isAlive ? neighbors >= surv1 && neighbors <= surv2 : neighbors === revive
+          newCell.isAlive = newCell.isAlive ? neighbors >= surv1 && neighbors <= surv2 : neighbors == revive
           
           return newCell;
         }
@@ -269,4 +320,3 @@ window.initialSeed = [[{"position":{"y":0,"x":0}},{"position":{"y":0,"x":1}},{"p
   ,[{"position":{"y":5,"x":0}},{"position":{"y":5,"x":1},"isAlive":true},{"position":{"y":5,"x":2}},{"position":{"y":5,"x":3}},{"position":{"y":5,"x":4}},{"position":{"y":5,"x":5}},{"position":{"y":5,"x":6},"isAlive":true},{"position":{"y":5,"x":7},"isAlive":false},{"position":{"y":5,"x":8},"isAlive":true},{"position":{"y":5,"x":9}},{"position":{"y":5,"x":10}},{"position":{"y":5,"x":11}},{"position":{"y":5,"x":12}},{"position":{"y":5,"x":13},"isAlive":true},{"position":{"y":5,"x":14}}],[{"position":{"y":6,"x":0}},{"position":{"y":6,"x":1},"isAlive":false},{"position":{"y":6,"x":2}},{"position":{"y":6,"x":3},"isAlive":true},{"position":{"y":6,"x":4},"isAlive":true},{"position":{"y":6,"x":5},"isAlive":true},{"position":{"y":6,"x":6},"isAlive":false},{"position":{"y":6,"x":7}},{"position":{"y":6,"x":8},"isAlive":false},{"position":{"y":6,"x":9},"isAlive":true},{"position":{"y":6,"x":10},"isAlive":true},{"position":{"y":6,"x":11},"isAlive":true},{"position":{"y":6,"x":12}},{"position":{"y":6,"x":13},"isAlive":false},{"position":{"y":6,"x":14}}],[{"position":{"y":7,"x":0}},{"position":{"y":7,"x":1}},{"position":{"y":7,"x":2}},{"position":{"y":7,"x":3},"isAlive":false},{"position":{"y":7,"x":4},"isAlive":false},{"position":{"y":7,"x":5},"isAlive":false},{"position":{"y":7,"x":6}},{"position":{"y":7,"x":7}},{"position":{"y":7,"x":8}},{"position":{"y":7,"x":9},"isAlive":false},{"position":{"y":7,"x":10},"isAlive":false},{"position":{"y":7,"x":11},"isAlive":false},{"position":{"y":7,"x":12}},{"position":{"y":7,"x":13}},{"position":{"y":7,"x":14}}],[{"position":{"y":8,"x":0}},{"position":{"y":8,"x":1}},{"position":{"y":8,"x":2}},{"position":{"y":8,"x":3},"isAlive":true},{"position":{"y":8,"x":4},"isAlive":true},{"position":{"y":8,"x":5},"isAlive":true},{"position":{"y":8,"x":6}},{"position":{"y":8,"x":7}},{"position":{"y":8,"x":8}},{"position":{"y":8,"x":9},"isAlive":true},{"position":{"y":8,"x":10},"isAlive":true},{"position":{"y":8,"x":11},"isAlive":true},{"position":{"y":8,"x":12},"isAlive":false},{"position":{"y":8,"x":13}},{"position":{"y":8,"x":14}}],[{"position":{"y":9,"x":0}},{"position":{"y":9,"x":1},"isAlive":true},{"position":{"y":9,"x":2}},{"position":{"y":9,"x":3},"isAlive":false},{"position":{"y":9,"x":4},"isAlive":false},{"position":{"y":9,"x":5},"isAlive":false},{"position":{"y":9,"x":6},"isAlive":true},{"position":{"y":9,"x":7}},{"position":{"y":9,"x":8},"isAlive":true},{"position":{"y":9,"x":9},"isAlive":false},{"position":{"y":9,"x":10},"isAlive":false
   },{"position":{"y":9,"x":11},"isAlive":false},{"position":{"y":9,"x":12}},{"position":{"y":9,"x":13},"isAlive":true},{"position":{"y":9,"x":14}}],[{"position":{"y":10,"x":0}},{"position":{"y":10,"x":1},"isAlive":true},{"position":{"y":10,"x":2}},{"position":{"y":10,"x":3}},{"position":{"y":10,"x":4}},{"position":{"y":10,"x":5}},{"position":{"y":10,"x":6},"isAlive":true},{"position":{"y":10,"x":7}},{"position":{"y":10,"x":8},"isAlive":true},{"position":{"y":10,"x":9}},{"position":{"y":10,"x":10}},{"position":{"y":10,"x":11}},{"position":{"y":10,"x":12},"isAlive":false},{"position":{"y":10,"x":13},"isAlive":true},{"position":{"y":10,"x":14}}],[{"position":{"y":11,"x":0}},{"position":{"y":11,"x":1},"isAlive":true},{"position":{"y":11,"x":2}},{"position":{"y":11,"x":3}},{"position":{"y":11,"x":4}},{"position":{"y":11,"x":5}},{"position":{"y":11,"x":6},"isAlive":true},{"position":{"y":11,"x":7}},{"position":{"y":11,"x":8},"isAlive":true},{"position":{"y":11,"x":9}},{"position":{"y":11,"x":10}},{"position":{"y":11,"x":11}},{"position":{"y":11,"x":12}},{"position":{"y":11,"x":13},"isAlive":true},{"position":{"y":11,"x":14}}],[{"position":{"y":12,"x":0}},{"position":{"y":12,"x":1},"isAlive":false},{"position":{"y":12,"x":2}},{"position":{"y":12,"x":3},"isAlive":false},{"position":{"y":12,"x":4},"isAlive":false},{"position":{"y":12,"x":5},"isAlive":false},{"position":{"y":12,"x":6},"isAlive":false},{"position":{"y":12,"x":7},"isAlive":false},{"position":{"y":12,"x":8},"isAlive":false},{"position":{"y":12,"x":9}},{"position":{"y":12,"x":10}},{"position":{"y":12,"x":11}},{"position":{"y":12,"x":12}},{"position":{"y":12,"x":13},"isAlive":false},{"position":{"y":12,"x":14}}],[{"position":{"y":13,"x":0}},{"position":{"y":13,"x":1}},{"position":{"y":13,"x":2}},{"position":{"y":13,"x":3},"isAlive":true},{"position":{"y":13,"x":4},"isAlive":true},{"position":{"y":13,"x":5},"isAlive":true},{"position":{"y":13,"x":6}},{"position":{"y":13,"x":7}},{"position":{"y":13,"x":8}},{"position":{"y":13,"x":9},"isAlive":true},{"position":{"y":13,"x":10},"isAlive":true},{"position":{"y":13,"x":11},"isAlive":true},{"position":{"y":13,"x":12}},{"position":{"y":13,"x":13}},{"position":{"y":13,"x":14}}],[{"position":{"y":14,"x":0}},{"position":{"y":14,"x":1}},{"position":{"y":14,"x":2}},{"position":{"y":14,"x":3}},{"position":{"y":14,"x":4}},{"position":{"y":14,"x":5}},{"position":{"y":14,"x":6}},{"position":{"y":14,"x":7}},{"position":{"y":14,"x":8}},{"position":{"y":14,"x":9}},{"position":{"y":14,"x":10
   }},{"position":{"y":14,"x":11}},{"position":{"y":14,"x":12}},{"position":{"y":14,"x":13}},{"position":{"y":14,"x":14}}]];
-
