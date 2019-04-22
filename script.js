@@ -90,6 +90,8 @@
       $scope.revive=3;
       var changeFlag = 0;
       var alive = 0;
+      var grandparent;
+      var parent;
       
       function togglePlay(){
         if(!vm.isStarted && vm.timer){ 
@@ -97,8 +99,6 @@
           vm.isStarted = false;
           return;
         }
-        var grandparent;
-        var parent;
         var num = $scope.iteration;
         var stableDetected = 0;
         vm.isStarted = true;
@@ -120,6 +120,7 @@
             stableDetected = compare(grandparent, vm.life.board);
           }
 
+console.log(alive + " " + stableDetected);
           //Next now returns -1 if it hasn't changed anything.
           if(alive != -1 && !stableDetected){
             $scope.cellsAlive = alive;
