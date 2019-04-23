@@ -120,7 +120,6 @@
             stableDetected = compare(grandparent, vm.life.board);
           }
 
-console.log(alive + " " + stableDetected);
           //Next now returns -1 if it hasn't changed anything.
           if(alive != -1 && !stableDetected){
             $scope.cellsAlive = alive;
