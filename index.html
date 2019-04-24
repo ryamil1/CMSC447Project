@@ -1,125 +1,126 @@
 <!DOCTYPE html>
 <html ng-app='app'>
-<head>
-  <meta name="description" content="AngularJs solution for Conway's Game of Life - http://en.wikipedia.org/wiki/Conway's_Game_of_Life" />
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css"/>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/slate/bootstrap.min.css" />
 
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+<head>
+   <meta name="description"
+      content="AngularJs solution for Conway's Game of Life - http://en.wikipedia.org/wiki/Conway's_Game_of_Life" />
+   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js">
+
+   </script>
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css" />
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/slate/bootstrap.min.css" />
+
+   <meta charset="utf-8">
+   <link rel="stylesheet" href="style.css">
+   <script src="script.js">
+
+   </script>
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
 
 </head>
+
 <body>
-  <div class="container-fluid" ng-controller='GameController as vm'>
-  <header>Game of Life</header>
-    <div class="container">
-    <table  id="frame" border="1">
-      <tr>
-      <td>
-    <table class='grid'>
-      <tr ng-repeat="row in vm.board">
-        <td ng-repeat="cell in row"
-            ng-class="{'alive':cell.isAlive}"
-            ng-style="{'background-color':gridColor}">
-          <span id="cell" ng-show="cell.isAlive" ng-style="{'color':cellColor}">{{userSelect}}</span>
-        </td>
-      </tr>
-    </table>
-      </td>
-      </tr>
-    </table>
-    </div>
+   <div class="container-fluid" ng-controller='GameController as vm'>
+      <header>Game of Life</header>
+      <div class="container">
+         <table class='grid'>
+            <tr ng-repeat="row in vm.board">
+               <td ng-repeat="cell in row" ng-class="{'alive':cell.isAlive}" ng-style="{'background-color':gridColor}">
+                  <span id="cell" ng-show="cell.isAlive" ng-style="{'color':cellColor}">{{userSelect}}</span>
+               </td>
+            </tr>
+         </table>
+      </div>
 
-  <section>
-    <div class="buttons-container">
-  <table class="one" border ="1">
-              <tr>
-                <td></td>
-                 <td>X</td>
-                 <td>Y</td>
-              </tr>
-              <tr>
-                 <td>Neighbors to Survive: </td>
-                 <td><input type = "text" ng-model = "survive1"></td>
-                 <td><input type = "text" ng-model = "survive2"></td>
-              </tr>
-              <tr>
-                 <td>Neighbors to Revive: </td>
-                 <td><input type = "text" ng-model = "revive"></td>
-              </tr>
-              <tr>
-                 <td>Grid Size: </td>
-                 <td><input type="text" ng-model="w"></td>
-                 <td><input type="text" ng-model="h"></td> 
+      <section>
+         <div class="buttons-container">
+            <table class="table table-condensed" border="1">
+               <tr>
+                  <td></td>
+                  <td>X</td>
+                  <td>Y</td>
                </tr>
-  
-            </table>
-   <table class="two" border ="1">
-              <tr>
-                <td>Cells Alive</td>
-                 <td><span ng-model="cellsAlive">{{cellsAlive}}</span></td>
-                 <td>Iteration</td>
-                 <td><span id="iterations" ng-model="iterationCount">{{iterationCount}}</span></td>
-              </tr>
-              <tr>
-                 <td>Cell Shape</td>
-                 <td>Grid Color</td>
-                 <td>Cell Color</td>
-                 <td>Speed</td>
-              </tr>
-              <tr>
-                 <td>
-                        <select ng-model="userSelect">
-                            <option value="&#9679;">Circle</option>
-                            <option value="&#9632;">Square</option>
-                            <option value="&#9650;">Triangle</option>
-                        </select>
-                 </td>
-                 <td>
-                   <input type="color" value="#ffffff" ng-model="gridColor" ><br>
-                 </td>
-                  <td>
-                   <input type="color" ng-model="cellColor"><br>
-                  </td>
-                 <td>
-                      <select ng-model="time" style="solid black">
-                      <option value="1000">Slow</option>
-                      <option value="300">Normal</option>
-                      <option value="100">Fast</option>
-                      </select>
-                 </td>
-              </tr>
-  
-    </table>
-    
-    <table class="three" border ="1">
-              <tr>
-                <td class="error" colspan="2">Error Reporting Area</td>
-              </tr>
-              <tr>
-                 <td><label for="autoplay">
-                     <input id="autoplay" type="checkbox" 
-                            ng-model="vm.isStarted"
-                            ng-change="vm.togglePlay()"> Play
-                   </label>
-                   </td>
-                 <td>Enter Number of Iterations:    <input type="text" placeholder="# of Iterations" ng-model="iteration"/></td>
-              </tr>
-              <tr>
-                 <td ><button
-                    ng-click="vm.reset()"> NEW</button>
-                 </td>
-                 <td><input type="file" id="myFile" style="text-align:center;"></td>
-              </tr>
-  
-   </table>
+               <tr>
+                  <td>Neighbors to Survive: </td>
+                  <td><input class="form-control  input-sm" type="text" ng-model="survive1"></td>
+                  <td><input class="form-control input-sm" type="text" ng-model="survive2"></td>
+               </tr>
+               <tr>
+                  <td>Neighbors to Revive: </td>
+                  <td><input class="form-control  input-sm" type="text" ng-model="revive"></td>
+                  <td></td>
+               </tr>
+               <tr>
+                  <td>Grid Size: </td>
+                  <td><input class="form-control  input-sm" type="text" ng-model="w"></td>
+                  <td><input class="form-control  input-sm" type="text" ng-model="h"></td>
+               </tr>
 
-    </div>
-    </section>
-    
-  </div>  
+            </table>
+            <table class="table table-condensed" border="1">
+               <tr>
+                  <td>Cells Alive:</td>
+                  <td><span ng-model="cellsAlive" ng-style="{'color':'Chartreuse'}">{{cellsAlive}}</span></td>
+                  <td>Iteration #:</td>
+                  <td><span id="iterations" ng-model="iterationCount">{{iterationCount}}</span></td>
+               </tr>
+               <tr>
+                  <td>Cell Shape</td>
+                  <td>Grid Color</td>
+                  <td>Cell Color</td>
+                  <td>Speed</td>
+               </tr>
+               <tr>
+                  <td>
+                     <select class="form-control input-sm" ng-model="userSelect">
+                        <option value="&#9679;">Circle &#9679;</option>
+                        <option value="&#9632;">Square &#9632;</option>
+                        <option value="&#9650;">Triangle &#9650;</option>
+                     </select>
+                  </td>
+                  <td>
+                     <input type="color" value="#ffffff" ng-model="gridColor"><br>
+                  </td>
+                  <td>
+                     <input type="color" ng-model="cellColor"><br>
+                  </td>
+                  <td>
+                     <select class="form-control input-sm" ng-model="time">
+                        <option value="1000">Slow</option>
+                        <option value="300">Normal</option>
+                        <option value="100">Fast</option>
+                     </select>
+                  </td>
+               </tr>
+
+            </table>
+
+            <table class="table table-condensed" class="three" border="1">
+               <tr>
+                  <td class="error" colspan="3">Error Reporting Area</td>
+               </tr>
+               <tr>
+                  <td><label for="autoplay" class="btn btn-default .btn-block">
+                        <input class="form-check-input" id="autoplay" type="checkbox" ng-model="vm.isStarted"
+                           ng-change="vm.togglePlay()"> Play
+                     </label>
+                  </td>
+                  <td>Enter Number of Iterations:</td>
+                  <td> <input class="form-control  input-sm" type="text" placeholder="# of Iterations"
+                        ng-model="iteration" /></td>
+               </tr>
+               <tr>
+                  <td><button class="btn btn-success .btn-block" ng-click="vm.reset()"> NEW</button>
+                  </td>
+                  <td colspan="2"><input ng-style="{'color':'white'}" type="file" id="myFile"></td>
+               </tr>
+
+            </table>
+
+         </div>
+      </section>
+
+   </div>
 </body>
+
 </html>
