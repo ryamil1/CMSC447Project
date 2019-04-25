@@ -25,8 +25,7 @@
       <div class="container">
          <table class='grid'>
             <tr ng-repeat="row in vm.board">
-               <td ng-repeat="cell in row" ng-class="{'alive':cell.isAlive}" ng-style="{'background-color':gridColor}"
-                  ng-click="cell.toggle()">
+               <td ng-repeat="cell in row" ng-class="{'alive':cell.isAlive}" ng-style="{'background-color':gridColor}">
                   <span id="cell" ng-show="cell.isAlive" ng-style="{'color':cellColor}">{{userSelect}}</span>
                </td>
             </tr>
