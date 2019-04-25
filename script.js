@@ -76,11 +76,10 @@
             reset();
           } else {
             vm.life = life.createNew(newBoard,$scope.survive1,$scope.survive2,$scope.revive);
-            //vm.board = vm.life.board;
+
             $scope.$apply(function() {
               vm.board = vm.life.board;
             })
-            // >>>>>>>>>>>>>> Board refresh should go here <<<<<<<<<<<<<<<<<<<<<<
           }
         });
         reader.readAsText(input.files[0]);
@@ -89,11 +88,8 @@
     
     $scope.errors = "Currently No Errors";
     $scope.time= "1000";
-    vm.thumbs = [];
     vm.reset = reset;
-    vm.load = load;
     vm.togglePlay = togglePlay;
-    vm.save = save;
     $scope.iteration=10;
     var num= $scope.iteration;
     $scope.userSelect = '\u25CF';
@@ -177,18 +173,6 @@
         }
       }
       return 1;
-    }
-    
-    function save(){
-      var board = angular.copy(vm.board);
-      console.log(board);
-      vm.thumbs.push(board);
-    }
-    
-    function load(thumb){
-      reset();
-      vm.life = life.createNew(thumb);
-      vm.board = vm.life.board;
     }
     
     function reset(){
