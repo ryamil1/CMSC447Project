@@ -316,7 +316,7 @@
         var newCell = cell.createNew(oldCell.position, {isAlive: oldCell.isAlive});
         var neighbors = newCell.getAliveNeighbors(previousBoard);
         
-        newCell.isAlive = newCell.isAlive ? neighbors >= surv1 && neighbors <= surv2 : neighbors == revive
+        newCell.isAlive = newCell.isAlive ? neighbors >= surv1 && neighbors <= surv2 : neighbors == revive;
         
         return newCell;
       }
@@ -326,7 +326,7 @@
         previousBoard = angular.copy(board);
         for (var y = 0; y < height; y++) {
           for (var x = 0; x < width; x++) {
-            var curr=previousBoard[x][y].isAlive;
+            var curr = previousBoard[y][x].isAlive;
             board[y][x] = newCellState(previousBoard, x, y);
             if(!curr && board[y][x].isAlive)
             {
