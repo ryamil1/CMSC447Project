@@ -83,7 +83,7 @@
           }
         });
         reader.readAsText(input.files[0]);
-      }   
+      }
     });
     
     $scope.errors = "Currently No Errors";
@@ -122,6 +122,7 @@
 
       }
       var stableDetected = 0;
+      document.getElementById("myFile").value = "";
       vm.isStarted = true;
       //Expanded this to be more readable.
       vm.timer = $interval(function(){
@@ -177,6 +178,7 @@
     
     function reset(){
 //        if(vm.isStarted) vm.togglePlay();
+      document.getElementById("myFile").value = "";
       $scope.gridColor = '#ffffff';
       num=$scope.iteration;
       $scope.cellColor = '#000000';
