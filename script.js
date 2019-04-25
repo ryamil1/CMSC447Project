@@ -87,7 +87,7 @@
     });
     
     $scope.errors = "Currently No Errors";
-    $scope.time= "1000";
+    $scope.time= "300";
     vm.reset = reset;
     vm.togglePlay = togglePlay;
     $scope.iteration=10;
@@ -113,7 +113,7 @@
         return;
       }
       var num = $scope.iteration;
-      if(num > 216000 || num<0)
+      if(num > 216000 || num<1)
       {
               $scope.errors = "ERROR: NUMBER OF ITERATIONS MUST BE IN RANGE 1-216000";
               $scope.iteration=10;
