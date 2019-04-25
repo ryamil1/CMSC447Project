@@ -24,6 +24,9 @@
       
         reader.addEventListener('load', function (e) {
           //Make new board, change display conditions, stop stuff.
+          $scope.$apply(function() {
+            $scope.errors = "Currently No Errors";
+            })
           var newBoard = board.createNew($scope.h, $scope.w);
           vm.isStarted = false;
           $scope.iterationCount = 0;
@@ -36,8 +39,12 @@
           
           //For each line, parse as ints.
           words.forEach(function(pair) {
+
             var word = pair.split(',');
             if(word.length > 2){
+              $scope.$apply(function() {
+              $scope.errors = "FILE ERROR: COORDINATE FORMAT IS INCORRECT";
+            })
               //>>>>Error message<<<<
               tooManyCoords = 1;
               return;
@@ -47,6 +54,9 @@
             
             if(isNaN(x) || isNaN(y)) {
               //>>>>Error message<<<<
+              $scope.$apply(function() {
+              $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
+              })
               console.log(word[0] + " " + word[1]);
               return;
             }
@@ -55,6 +65,9 @@
             if ($scope.h > x + 1 && $scope.w > y + 1) {
               newBoard[x][y]["isAlive"] = true;
             } else {
+              $scope.$apply(function() {
+              $scope.errors = "FILE ERROR: COORDINATES OUTSIDE OF SPECIFIED GRID RANGE";
+            })
             //Error message here.
             }
             $scope.cellsAlive++;
@@ -74,6 +87,7 @@
       }   
     });
     
+    $scope.errors = "Currently No Errors";
     $scope.time= "1000";
     vm.thumbs = [];
     vm.reset = reset;
@@ -103,6 +117,14 @@
         return;
       }
       var num = $scope.iteration;
+      if(num > 216000 || num<0)
+      {
+              $scope.errors = "ERROR: NUMBER OF ITERATIONS MUST BE IN RANGE 1-216000";
+              $scope.iteration=10;
+        vm.isStarted = false;
+        return;
+
+      }
       var stableDetected = 0;
       vm.isStarted = true;
       //Expanded this to be more readable.
@@ -131,7 +153,7 @@
         }
         num--;
       }, $scope.time, num);
-    }
+  }
     
     function compare(grandparent, child){
       if(grandparent.length != child.length){
@@ -174,8 +196,26 @@
       $scope.gridColor = '#ffffff';
       num=$scope.iteration;
       $scope.cellColor = '#000000';
+      $scope.errors = "Currently No Errors";
       $scope.iterationCount= 0;
       $scope.cellsAlive=0;
+      if($scope.h > 40 && $scope.w > 100)
+      {
+        $scope.errors = "GRID ERROR: GRID HAS MAX SIZE OF 40 X 100. Max Size Set";
+        $scope.w=100;
+        $scope.h=40;
+      }
+      else if($scope.h > 40)
+      {
+        $scope.errors = "GRID ERROR: GRID HAS MAX HEIGHT OF 40. Max Height Set";
+        $scope.h=40;
+      }
+      else if($scope.w > 100)
+      {
+        $scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
+        $scope.w=100;
+      }
+
       var seed = board.createNew($scope.h,$scope.w);
       vm.life = life.createNew(seed,$scope.survive1,$scope.survive2,$scope.revive);
       vm.board = vm.life.board;
@@ -284,15 +324,6 @@
       function next(alive){
         var changeFlag = 0;
         previousBoard = angular.copy(board);
-        alive=0;
-        for (var y = 0; y < height; y++) {
-          for (var x = 0; x < width; x++) {
-            if(previousBoard[y][x].isAlive)
-            {
-              alive++;
-            }
-        }
-      }
         for (var y = 0; y < height; y++) {
           for (var x = 0; x < width; x++) {
             var curr=previousBoard[x][y].isAlive;

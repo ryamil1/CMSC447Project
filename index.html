@@ -25,7 +25,8 @@
       <div class="container">
          <table class='grid'>
             <tr ng-repeat="row in vm.board">
-               <td ng-repeat="cell in row" ng-class="{'alive':cell.isAlive}" ng-style="{'background-color':gridColor}">
+               <td ng-repeat="cell in row" ng-class="{'alive':cell.isAlive}" ng-style="{'background-color':gridColor}"
+                  ng-click="cell.toggle()">
                   <span id="cell" ng-show="cell.isAlive" ng-style="{'color':cellColor}">{{userSelect}}</span>
                </td>
             </tr>
@@ -97,7 +98,8 @@
 
             <table class="table table-condensed" class="three" border="1">
                <tr>
-                  <td class="error" colspan="3">Error Reporting Area</td>
+                  <td colspan="3" class="alert alert-warning"><span ng-model="errors"
+                        ng-style="{'color':'black'}">{{errors}}</span></td>
                </tr>
                <tr>
                   <td><label for="autoplay" class="btn btn-default .btn-block">
