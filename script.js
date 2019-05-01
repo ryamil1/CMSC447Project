@@ -13,7 +13,7 @@
   function GameController($interval, board, life, $scope){
     var vm = this;
     
-    var input = document.getElementById("myFile");
+    var input = document.getElementById("fileInput");
     var reader = new FileReader();
     var words = "";
 
@@ -32,7 +32,7 @@
           if(vm.timer){ 
             $interval.cancel(vm.timer);
           }
-          var newBoard = board.createNew($scope.h, $scope.w);
+          var newBoard = board.createNew($scope.gridH, $scope.gridW);
           vm.isStarted = false;
           $scope.iterationCount = 0;
           $scope.cellsAlive = 0;
@@ -68,7 +68,7 @@
               }
             
               //If out of bounds of the grid, abort.
-              if ($scope.h > x + 1 && $scope.w > y + 1) {
+              if ($scope.gridH > x + 1 && $scope.gridW > y + 1) {
                 newBoard[x][y]["isAlive"] = true;
               } else {
                 $scope.$apply(function() {
@@ -82,7 +82,7 @@
           if(tooManyCoords){
             reset();
           } else {
-            vm.life = life.createNew(newBoard,$scope.survive1,$scope.survive2,$scope.revive);
+            vm.life = life.createNew(newBoard,$scope.surviveMin,$scope.surviveMax,$scope.revive);
 
             $scope.$apply(function() {
               vm.board = vm.life.board;
@@ -99,14 +99,14 @@
     vm.togglePlay = togglePlay;
     $scope.iteration=10;
     var num= $scope.iteration;
-    $scope.userSelect = '\u25CF';
-    $scope.w=15;
-    $scope.h=15;
+    $scope.shapeSelect = '\u25CF';
+    $scope.gridW=15;
+    $scope.gridH=15;
     $scope.cellsAlive=0;
     $scope.gridColor = '#ffffff';
     $scope.iterationCount= 0;
-    $scope.survive1=2;
-    $scope.survive2=3;
+    $scope.surviveMin=2;
+    $scope.surviveMax=3;
     $scope.revive=3;
     var changeFlag = 0;
     var alive = 0;
@@ -129,7 +129,7 @@
 
       }
       var stableDetected = 0;
-      document.getElementById("myFile").value = "";
+      document.getElementById("fileInput").value = "";
       vm.isStarted = true;
       //Expanded this to be more readable.
       vm.timer = $interval(function(){
@@ -185,39 +185,39 @@
     
     function reset(){
 //        if(vm.isStarted) vm.togglePlay();
-      document.getElementById("myFile").value = "";
+      document.getElementById("fileInput").value = "";
       $scope.gridColor = '#ffffff';
       num=$scope.iteration;
       $scope.cellColor = '#000000';
       $scope.errors = "Currently No Errors";
       $scope.iterationCount= 0;
       $scope.cellsAlive=0;
-      if($scope.h > 40 && $scope.w > 100)
+      if($scope.gridH > 40 && $scope.gridW > 100)
       {
         $scope.errors = "GRID ERROR: GRID HAS MAX SIZE OF 40 X 100. Max Size Set";
-        $scope.w=100;
-        $scope.h=40;
+        $scope.gridW=100;
+        $scope.gridH=40;
       }
-      else if($scope.h > 40)
+      else if($scope.gridH > 40)
       {
         $scope.errors = "GRID ERROR: GRID HAS MAX HEIGHT OF 40. Max Height Set";
-        $scope.h=40;
+        $scope.gridH=40;
       }
-      else if($scope.w > 100)
+      else if($scope.gridW > 100)
       {
         $scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
-        $scope.w=100;
+        $scope.gridW=100;
       }
 
-      var seed = board.createNew($scope.h,$scope.w);
-      vm.life = life.createNew(seed,$scope.survive1,$scope.survive2,$scope.revive);
+      var seed = board.createNew($scope.gridH,$scope.gridW);
+      vm.life = life.createNew(seed,$scope.surviveMin,$scope.surviveMax,$scope.revive);
       vm.board = vm.life.board;
       vm.isStarted = false;
     }
     
     (function activate(){
-      var seed = board.createNew($scope.h,$scope.w);
-      vm.life = life.createNew(seed, $scope.survive1,$scope.survive2,$scope.revive);
+      var seed = board.createNew($scope.gridH,$scope.gridW);
+      vm.life = life.createNew(seed, $scope.surviveMin,$scope.surviveMax,$scope.revive);
       vm.board = vm.life.board;
     }());
   }
