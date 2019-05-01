@@ -51,7 +51,7 @@
             //If the line is white space, skip it.
             if(!(pair == "\n" || pair.trim().length === 0)) {
               var word = pair.split(',');
-
+              
               //If the line doesn't have two tokens, it is malformed.
               if(word.length != 2){
                 $scope.$apply(function() {
@@ -66,7 +66,7 @@
               //If the tokens do not parse as ints, abort.
               if(isNaN(x) || isNaN(y)) {
                 $scope.$apply(function() {
-                $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
+                  $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
                 })
                 return;
               }
@@ -127,11 +127,11 @@
 
       //Validate iterationInput is number
       if(isNaN(parseInt($scope.iterationInput))){
-		    $scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
+        $scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
         $scope.iterationInput=10;
         vm.isStarted = false;
         return;
-	    }
+      }
 
       //Validate iteration input is a valid number.
       var num = $scope.iterationInput;
@@ -178,7 +178,7 @@
         }
         num--;
       }, $scope.time, num);
-  }
+    }
 
     //Deep comparison of object.
     function compare(grandparent, child){
@@ -197,8 +197,8 @@
           g = grandparent[i][j].hasOwnProperty("isAlive");
 
           if( ((c && g) &&
-               grandparent[i][j].isAlive != child[i][j].isAlive) ||
-               (c != g)){
+          grandparent[i][j].isAlive != child[i][j].isAlive) ||
+          (c != g)){
             return 0;
           }
         }
@@ -207,55 +207,55 @@
       return 1;
     }
 
-  //Check the validity of the fields provided by the user.
-	function inputValidation(){
-		//Validate iterationInput is a number.
-		if(isNaN(parseInt($scope.iterationInput))){
-			$scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
-		}
+    //Check the validity of the fields provided by the user.
+    function inputValidation(){
+      //Validate iterationInput is a number.
+      if(isNaN(parseInt($scope.iterationInput))){
+        $scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
+      }
 
-		//Validate gridH is a number.
-		if(isNaN(parseInt($scope.gridH))){
-			$scope.errors = "ERROR: GRID WIDTH(X) INPUT IS NOT A NUMBER.";
-		}
+      //Validate gridH is a number.
+      if(isNaN(parseInt($scope.gridH))){
+        $scope.errors = "ERROR: GRID WIDTH(X) INPUT IS NOT A NUMBER.";
+      }
 
-		//Validate gridW is a number.
-		if(isNaN(parseInt($scope.gridW))){
-			$scope.errors = "ERROR: GRID HEIGHT(Y) IS NOT A NUMBER.";
-		}
+      //Validate gridW is a number.
+      if(isNaN(parseInt($scope.gridW))){
+        $scope.errors = "ERROR: GRID HEIGHT(Y) IS NOT A NUMBER.";
+      }
 
-		//Validate grid size.
-		if($scope.gridH > 40 && $scope.gridW > 100){
-			$scope.errors = "GRID ERROR: GRID HAS MAX SIZE OF 40 X 100. Max Size Set";
-			$scope.gridW=100;
-			$scope.gridH=40;
-		}
-		else if($scope.gridH > 40)
-		{
-			$scope.errors = "GRID ERROR: GRID HAS MAX HEIGHT OF 40. Max Height Set";
-			$scope.gridH=40;
-		}
-		else if($scope.gridW > 100)
-		{
-			$scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
-			$scope.gridW=100;
-		}
+      //Validate grid size.
+      if($scope.gridH > 40 && $scope.gridW > 100){
+        $scope.errors = "GRID ERROR: GRID HAS MAX SIZE OF 40 X 100. Max Size Set";
+        $scope.gridW=100;
+        $scope.gridH=40;
+      }
+      else if($scope.gridH > 40)
+      {
+        $scope.errors = "GRID ERROR: GRID HAS MAX HEIGHT OF 40. Max Height Set";
+        $scope.gridH=40;
+      }
+      else if($scope.gridW > 100)
+      {
+        $scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
+        $scope.gridW=100;
+      }
 
-		//Validate surviveMin is a number.
-		if(isNaN(parseInt($scope.surviveMin))){
-			$scope.errors = "ERROR: SURVIVE MINIMUM(X) IS NOT A NUMBER.";
-		}
-		//Validate surviveMax is a number.
-		if(isNaN(parseInt($scope.surviveMax))){
-			$scope.errors = "ERROR: SURVIVE MAXIMUM(Y) IS NOT A NUMBER.";
-		}
-		//Validate revive is a number.
-		if(isNaN(parseInt($scope.revive))){
-			$scope.errors = "ERROR: REVIVE IS NOT A NUMBER.";
-		}
+      //Validate surviveMin is a number.
+      if(isNaN(parseInt($scope.surviveMin))){
+        $scope.errors = "ERROR: SURVIVE MINIMUM(X) IS NOT A NUMBER.";
+      }
+      //Validate surviveMax is a number.
+      if(isNaN(parseInt($scope.surviveMax))){
+        $scope.errors = "ERROR: SURVIVE MAXIMUM(Y) IS NOT A NUMBER.";
+      }
+      //Validate revive is a number.
+      if(isNaN(parseInt($scope.revive))){
+        $scope.errors = "ERROR: REVIVE IS NOT A NUMBER.";
+      }
 
 
-	}
+    }
     //Process new parameters and trigger input validation.
     function reset(){
       document.getElementById("fileInput").value = "";
@@ -265,7 +265,7 @@
       $scope.errors = "Currently No Errors";
       $scope.iterationCount= 0;
       $scope.cellsAlive=0;
-  	  inputValidation();
+      inputValidation();
 
       //Make a new representation of the board.
       var seed = board.createNew($scope.gridH,$scope.gridW);
@@ -402,15 +402,15 @@
               changeFlag = 1;
               alive--;
             }
+          }
         }
+        //If no cells changed, return -1 to indicate we are in a steady state.
+        if(!changeFlag){
+          return -1;
+        }
+        return alive;
       }
-      //If no cells changed, return -1 to indicate we are in a steady state.
-      if(!changeFlag){
-        return -1;
-      }
-      return alive;
     }
   }
-}
 
 }());
