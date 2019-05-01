@@ -27,6 +27,11 @@
           $scope.$apply(function() {
             $scope.errors = "Currently No Errors";
             })
+
+          reset();
+          if(vm.timer){ 
+            $interval.cancel(vm.timer);
+          }
           var newBoard = board.createNew($scope.h, $scope.w);
           vm.isStarted = false;
           $scope.iterationCount = 0;
@@ -39,19 +44,20 @@
           
           //For each line, parse as ints.
           words.forEach(function(pair) {
+            if(!(pair == "\n" || pair.trim().length === 0)) {
+              var word = pair.split(',');
+              if(word.length != 2){
+                $scope.$apply(function() {
+                $scope.errors = "FILE ERROR: COORDINATE FORMAT IS INCORRECT";
+              })
+                //>>>>Error message<<<<
+                tooManyCoords = 1;
+                return;
+              }
+              var x = parseInt(word[0], 10);
+              var y = parseInt(word[1], 10);
+            
 
-            var word = pair.split(',');
-            if(word.length > 2){
-              $scope.$apply(function() {
-              $scope.errors = "FILE ERROR: COORDINATE FORMAT IS INCORRECT";
-            })
-              //>>>>Error message<<<<
-              tooManyCoords = 1;
-              return;
-            }
-            var x = parseInt(word[0], 10);
-            var y = parseInt(word[1], 10);
-            if(!x == " "){
               if(isNaN(x) || isNaN(y)) {
                 //>>>>Error message<<<<
                 $scope.$apply(function() {
