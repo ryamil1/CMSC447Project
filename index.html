@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!--This code is based on an implementation of Conway's Game of Life found -->
+<!--at https://codepen.io/alanrsoares/pen/payKn-->
+<!--There does not appear to be a license attached to it.-->
 <html ng-app='app'>
 
 <head>
@@ -26,7 +29,7 @@
          <table class='grid'>
             <tr ng-repeat="row in vm.board">
                <td ng-repeat="cell in row" ng-class="{'alive':cell.isAlive}" ng-style="{'background-color':gridColor}">
-                  <span id="cell" ng-show="cell.isAlive" ng-style="{'color':cellColor}">{{userSelect}}</span>
+                  <span id="cell" ng-show="cell.isAlive" ng-style="{'color':cellColor}">{{shapeSelect}}</span>
                </td>
             </tr>
          </table>
@@ -42,8 +45,8 @@
                </tr>
                <tr>
                   <td>Neighbors to Survive: </td>
-                  <td><input class="form-control  input-sm" type="text" ng-model="survive1"></td>
-                  <td><input class="form-control input-sm" type="text" ng-model="survive2"></td>
+                  <td><input class="form-control  input-sm" type="text" ng-model="surviveMin"></td>
+                  <td><input class="form-control input-sm" type="text" ng-model="surviveMax"></td>
                </tr>
                <tr>
                   <td>Neighbors to Revive: </td>
@@ -52,8 +55,8 @@
                </tr>
                <tr>
                   <td>Grid Size: </td>
-                  <td><input class="form-control  input-sm" type="text" ng-model="w"></td>
-                  <td><input class="form-control  input-sm" type="text" ng-model="h"></td>
+                  <td><input class="form-control  input-sm" type="text" ng-model="gridW"></td>
+                  <td><input class="form-control  input-sm" type="text" ng-model="gridH"></td>
                </tr>
 
             </table>
@@ -72,7 +75,7 @@
                </tr>
                <tr>
                   <td>
-                     <select class="form-control input-sm" ng-model="userSelect">
+                     <select class="form-control input-sm" ng-model="shapeSelect">
                         <option value="&#9679;">Circle &#9679;</option>
                         <option value="&#9632;">Square &#9632;</option>
                         <option value="&#9650;">Triangle &#9650;</option>
@@ -108,12 +111,12 @@
                   </td>
                   <td>Enter Number of Iterations:</td>
                   <td> <input class="form-control  input-sm" type="text" placeholder="# of Iterations"
-                        ng-model="iteration" /></td>
+                        ng-model="iterationInput" /></td>
                </tr>
                <tr>
                   <td><button class="btn btn-success .btn-block" ng-click="vm.reset()"> NEW</button>
                   </td>
-                  <td colspan="2"><input ng-style="{'color':'white'}" type="file" id="myFile"></td>
+                  <td colspan="2"><input ng-style="{'color':'white'}" type="file" id="fileInput"></td>
                </tr>
 
             </table>
