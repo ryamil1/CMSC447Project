@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!--This code is based on an implementation of Conway's Game of Life found -->
+<!--at https://codepen.io/alanrsoares/pen/payKn-->
+<!--There does not appear to be a license attached to it.-->
 <html ng-app='app'>
 
 <head>
@@ -85,7 +88,7 @@
                      <input type="color" ng-model="cellColor"><br>
                   </td>
                   <td>
-                     <select class="form-control input-sm" ng-model="delayTime">
+                     <select class="form-control input-sm" ng-model="time">
                         <option value="1000">Slow</option>
                         <option value="300">Normal</option>
                         <option value="100">Fast</option>
