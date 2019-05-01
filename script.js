@@ -51,26 +51,27 @@
             }
             var x = parseInt(word[0], 10);
             var y = parseInt(word[1], 10);
+            if(!x == " "){
+              if(isNaN(x) || isNaN(y)) {
+                //>>>>Error message<<<<
+                $scope.$apply(function() {
+                $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
+                })
+                console.log(word[0] + " " + word[1]);
+                return;
+              }
             
-            if(isNaN(x) || isNaN(y)) {
-              //>>>>Error message<<<<
-              $scope.$apply(function() {
-              $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
+              //If out of bounds of the grid, abort.
+              if ($scope.h > x + 1 && $scope.w > y + 1) {
+                newBoard[x][y]["isAlive"] = true;
+              } else {
+                $scope.$apply(function() {
+                $scope.errors = "FILE ERROR: COORDINATES OUTSIDE OF SPECIFIED GRID RANGE";
               })
-              console.log(word[0] + " " + word[1]);
-              return;
+              //Error message here.
+              }
+              $scope.cellsAlive++;
             }
-            
-            //If out of bounds of the grid, abort.
-            if ($scope.h > x + 1 && $scope.w > y + 1) {
-              newBoard[x][y]["isAlive"] = true;
-            } else {
-              $scope.$apply(function() {
-              $scope.errors = "FILE ERROR: COORDINATES OUTSIDE OF SPECIFIED GRID RANGE";
-            })
-            //Error message here.
-            }
-            $scope.cellsAlive++;
           });
           if(tooManyCoords){
             reset();
