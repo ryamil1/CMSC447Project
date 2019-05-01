@@ -26,7 +26,7 @@
           //Make new board, change display conditions, stop stuff.
           $scope.$apply(function() {
             $scope.errors = "Currently No Errors";
-            })
+          })
 
           reset();
           if(vm.timer){ 
@@ -97,8 +97,8 @@
     $scope.time= "300";
     vm.reset = reset;
     vm.togglePlay = togglePlay;
-    $scope.iteration=10;
-    var num= $scope.iteration;
+    $scope.iterationInput=10;
+    var num= $scope.iterationInput;
     $scope.shapeSelect = '\u25CF';
     $scope.gridW=15;
     $scope.gridH=15;
@@ -119,11 +119,19 @@
         vm.isStarted = false;
         return;
       }
-      var num = $scope.iteration;
+      
+      if(isNaN(parseInt($scope.iterationInput))){
+		    $scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
+        $scope.iterationInput=10;
+        vm.isStarted = false;
+        return;
+	    }
+      
+      var num = $scope.iterationInput;
       if(num > 216000 || num<1)
       {
-              $scope.errors = "ERROR: NUMBER OF ITERATIONS MUST BE IN RANGE 1-216000";
-              $scope.iteration=10;
+        $scope.errors = "ERROR: NUMBER OF ITERATIONS MUST BE IN RANGE 1-216000";
+        $scope.iterationInput=10;
         vm.isStarted = false;
         return;
 
@@ -183,32 +191,65 @@
       return 1;
     }
     
+	function inputValidation(){
+		//Validate iterationInput is a number.
+		if(isNaN(parseInt($scope.iterationInput))){
+			$scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
+		}
+
+		//Validate gridH is a number.
+		if(isNaN(parseInt($scope.gridH))){
+			$scope.errors = "ERROR: GRID WIDTH(X) INPUT IS NOT A NUMBER.";
+		}
+		
+		//Validate gridW is a number.
+		if(isNaN(parseInt($scope.gridW))){
+			$scope.errors = "ERROR: GRID HEIGHT(Y) IS NOT A NUMBER.";
+		}
+
+		//Validate grid size.
+		if($scope.gridH > 40 && $scope.gridW > 100){
+			$scope.errors = "GRID ERROR: GRID HAS MAX SIZE OF 40 X 100. Max Size Set";
+			$scope.gridW=100;
+			$scope.gridH=40;
+		}
+		else if($scope.gridH > 40)
+		{
+			$scope.errors = "GRID ERROR: GRID HAS MAX HEIGHT OF 40. Max Height Set";
+			$scope.gridH=40;
+		}
+		else if($scope.gridW > 100)
+		{
+			$scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
+			$scope.gridW=100;
+		}
+
+		//Validate surviveMin is a number.
+		if(isNaN(parseInt($scope.surviveMin))){
+			$scope.errors = "ERROR: SURVIVE MINIMUM(X) IS NOT A NUMBER.";
+		}
+		//Validate surviveMax is a number.
+		if(isNaN(parseInt($scope.surviveMax))){
+			$scope.errors = "ERROR: SURVIVE MAXIMUM(Y) IS NOT A NUMBER.";
+		}
+		//Validate revive is a number.
+		if(isNaN(parseInt($scope.revive))){
+			$scope.errors = "ERROR: REVIVE IS NOT A NUMBER.";
+		}
+
+
+	}
+
     function reset(){
 //        if(vm.isStarted) vm.togglePlay();
       document.getElementById("fileInput").value = "";
       $scope.gridColor = '#ffffff';
-      num=$scope.iteration;
+      num=$scope.iterationInput;
       $scope.cellColor = '#000000';
       $scope.errors = "Currently No Errors";
       $scope.iterationCount= 0;
       $scope.cellsAlive=0;
-      if($scope.gridH > 40 && $scope.gridW > 100)
-      {
-        $scope.errors = "GRID ERROR: GRID HAS MAX SIZE OF 40 X 100. Max Size Set";
-        $scope.gridW=100;
-        $scope.gridH=40;
-      }
-      else if($scope.gridH > 40)
-      {
-        $scope.errors = "GRID ERROR: GRID HAS MAX HEIGHT OF 40. Max Height Set";
-        $scope.gridH=40;
-      }
-      else if($scope.gridW > 100)
-      {
-        $scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
-        $scope.gridW=100;
-      }
-
+	  inputValidation();
       var seed = board.createNew($scope.gridH,$scope.gridW);
       vm.life = life.createNew(seed,$scope.surviveMin,$scope.surviveMax,$scope.revive);
       vm.board = vm.life.board;
