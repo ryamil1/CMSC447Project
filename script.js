@@ -28,7 +28,7 @@
           //Make new board, change display conditions, stop stuff.
           $scope.$apply(function() {
             $scope.errors = "Currently No Errors";
-          })
+          });
 
           //Clear existing game and reset some things.
           reset();
@@ -40,7 +40,9 @@
           $scope.iterationCount = 0;
           $scope.cellsAlive = 0;
           var tooManyCoords = 0;
-
+          var outOfBounds = 0;
+          var nanError = 0;
+      
           //Get results from the reader
           words = e.target.result;
           words = words.split('\n');
@@ -54,43 +56,49 @@
               
               //If the line doesn't have two tokens, it is malformed.
               if(word.length != 2){
-                $scope.$apply(function() {
-                  $scope.errors = "FILE ERROR: COORDINATE FORMAT IS INCORRECT";
-                })
-                tooManyCoords = 1;
-                return;
+                if(!isNaN(parseInt(word[0]))){
+                  tooManyCoords = 1;
+                }
               }
               var x = parseInt(word[0], 10);
               var y = parseInt(word[1], 10);
 
               //If the tokens do not parse as ints, abort.
               if(isNaN(x) || isNaN(y)) {
-                $scope.$apply(function() {
-                  $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
-                })
-                return;
+                nanError = 1;
               }
 
               //If out of bounds of the grid, abort.
               if ($scope.gridH > x + 1 && $scope.gridW > y + 1) {
                 newBoard[x][y]["isAlive"] = true;
               } else {
-                $scope.$apply(function() {
-                  $scope.errors = "FILE ERROR: COORDINATES OUTSIDE OF SPECIFIED GRID RANGE";
-                })
+        				outOfBounds = 1;
               }
               $scope.cellsAlive++;
             }
           });
           if(tooManyCoords){
             reset();
+            $scope.$apply(function() {
+              $scope.errors = "FILE ERROR: COORDINATE FORMAT IS INCORRECT";
+            });
+          } else if(nanError){
+            reset();
+            $scope.$apply(function() {
+              $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
+            });
+          } else if(outOfBounds){
+            reset();
+            $scope.$apply(function() {
+              $scope.errors = "FILE ERROR: COORDINATES OUTSIDE OF SPECIFIED GRID RANGE";
+            });
           } else {
             vm.life = life.createNew(newBoard,$scope.surviveMin,$scope.surviveMax,$scope.revive);
 
             //Rerender board
             $scope.$apply(function() {
               vm.board = vm.life.board;
-            })
+            });
           }
         });
         reader.readAsText(input.files[0]);
@@ -211,12 +219,12 @@
     function inputValidation(){
       //Validate iterationInput is a number.
       if(isNaN(parseInt($scope.iterationInput))){
-        $scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
+        $scope.errors = "INPUT ERROR: ITERATION INPUT IS NOT A NUMBER.";
       }
 
       //Validate gridH is a number.
       if(isNaN(parseInt($scope.gridH))){
-        $scope.errors = "ERROR: GRID WIDTH(X) INPUT IS NOT A NUMBER.";
+        $scope.errors = "INPUT ERROR: GRID WIDTH(X) INPUT IS NOT A NUMBER.";
       }
 
       //Validate gridW is a number.
