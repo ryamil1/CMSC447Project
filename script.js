@@ -69,7 +69,8 @@
               }
 
               //If out of bounds of the grid, abort.
-              if ($scope.gridH > x + 1 && $scope.gridW > y + 1) {
+              if ($scope.gridH > x + 1 && $scope.gridW > y + 1 && 
+                  x >= 0 && y >= 0) {
                 newBoard[x][y]["isAlive"] = true;
               } else {
         				outOfBounds = 1;
@@ -247,6 +248,14 @@
       {
         $scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
         $scope.gridW=100;
+      }
+      else if($scope.gridW < 1){
+        $scope.errors = "GRID ERROR: GRID HAS MIN WIDTH OF 1. Min Width Set";
+        $scope.gridW=1;
+      }
+      else if($scope.gridH < 1){
+        $scope.errors = "GRID ERROR: GRID HAS MIN HEIGHT OF 1. Min Width Set";
+        $scope.gridH=1;
       }
 
       //Validate surviveMin is a number.
