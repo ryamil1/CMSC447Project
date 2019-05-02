@@ -135,7 +135,7 @@
       }
 
       //Validate iterationInput is number
-      if(isNaN(parseInt($scope.iterationInput))){
+      if(isNaN(parseInt($scope.iterationInput)) || ($scope.iterationInput %1 !==0)){
         $scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
         $scope.iterationInput=10;
         vm.isStarted = false;
@@ -156,6 +156,7 @@
       //Reset fileInput so that it can recognize the same file more than once.
       document.getElementById("fileInput").value = "";
       vm.isStarted = true;
+      $scope.errors="Currently No Errors";
       //Expanded this to be more readable.
       vm.timer = $interval(function(){
         //Kills it if it shouldn't be running.
@@ -219,11 +220,11 @@
     //Check the validity of the fields provided by the user.
     function inputValidation(){
       //Validate iterationInput is a number.
-      if(isNaN(parseInt($scope.iterationInput))){
+     /* if(isNaN(parseInt($scope.iterationInput))){
         $scope.errors = "INPUT ERROR: ITERATION INPUT IS NOT A NUMBER.";
-      }
+      }*/
 
-      //Validate gridH is a number.
+      /*//Validate gridH is a number.
       if(isNaN(parseInt($scope.gridH))){
         $scope.errors = "INPUT ERROR: GRID WIDTH(X) INPUT IS NOT A NUMBER.";
       }
@@ -256,19 +257,44 @@
       else if($scope.gridH < 1){
         $scope.errors = "GRID ERROR: GRID HAS MIN HEIGHT OF 1. Min Width Set";
         $scope.gridH=1;
+      }*/
+      
+      if(isNaN(parseInt($scope.gridH)) || ($scope.gridH % 1 !==0)){
+        $scope.errors = "GRID ERROR: GRID HEIGHT(Y) MUST BE INT IN RANGE [1,40]. GRID WIDTH(X) MUST BE INT IN RANGE [1,100] Default Set.";
+        $scope.gridW=15;
+        $scope.gridH=15;      
+      }
+
+      //Validate gridW is a number.
+      if(isNaN(parseInt($scope.gridW)) || ($scope.gridW % 1 !==0)){
+        $scope.errors = "GRID ERROR: GRID HEIGHT(Y) MUST BE INT IN RANGE [1,40]. GRID WIDTH(X) MUST BE INT IN RANGE [1,100] Default Set.";
+        $scope.gridW=15;
+        $scope.gridH=15;
+      }
+
+      //Validate grid size.
+      if($scope.gridH > 40 || $scope.gridW > 100){
+        $scope.errors = "GRID ERROR: GRID HEIGHT(Y) MUST BE INT IN RANGE [1,40]. GRID WIDTH(X) MUST BE INT IN RANGE [1,100] Default Set.";
+        $scope.gridW=15;
+        $scope.gridH=15;
+      }
+      if($scope.gridW < 1 || $scope.gridH < 1){
+        $scope.errors = "GRID ERROR: GRID HEIGHT(Y) MUST BE INT IN RANGE [1,40]. GRID WIDTH(X) MUST BE INT IN RANGE [1,100] Default Set.";
+        $scope.gridW=15;
+        $scope.gridH=15;
       }
 
       //Validate surviveMin is a number.
-      if(isNaN(parseInt($scope.surviveMin))){
-        $scope.errors = "ERROR: SURVIVE MINIMUM(X) IS NOT A NUMBER.";
+      if(isNaN(parseInt($scope.surviveMin)) || ($scope.surviveMin % 1 !==0)){
+        $scope.errors = "ERROR: SURVIVE MINIMUM(X) IS NOT AN INTEGER.";
       }
       //Validate surviveMax is a number.
-      if(isNaN(parseInt($scope.surviveMax))){
-        $scope.errors = "ERROR: SURVIVE MAXIMUM(Y) IS NOT A NUMBER.";
+      if(isNaN(parseInt($scope.surviveMax)) || ($scope.surviveMax % 1 !==0)){
+        $scope.errors = "ERROR: SURVIVE MAXIMUM(Y) IS NOT AN INTEGER.";
       }
       //Validate revive is a number.
-      if(isNaN(parseInt($scope.revive))){
-        $scope.errors = "ERROR: REVIVE IS NOT A NUMBER.";
+      if(isNaN(parseInt($scope.revive)) | ($scope.revive % 1 !==0)){
+        $scope.errors = "ERROR: REVIVE IS NOT AN INTEGER.";
       }
 
 
