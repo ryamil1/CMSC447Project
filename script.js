@@ -136,7 +136,7 @@
 
       //Validate iterationInput is number
       if(isNaN(parseInt($scope.iterationInput)) || ($scope.iterationInput %1 !==0)){
-        $scope.errors = "ERROR: ITERATION INPUT IS NOT A NUMBER.";
+        $scope.errors = "ERROR: ITERATION INPUT IS NOT AN INTEGER.";
         $scope.iterationInput=10;
         vm.isStarted = false;
         return;
