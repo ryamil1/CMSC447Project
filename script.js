@@ -64,7 +64,7 @@
               var y = parseInt(word[1], 10);
 
               //If the tokens do not parse as ints, abort.
-              if(isNaN(x) || isNaN(y)) {
+              if(x % 1 != 0 || y % 1 != 0) {
                 nanError = 1;
               }
 
@@ -219,46 +219,7 @@
 
     //Check the validity of the fields provided by the user.
     function inputValidation(){
-      //Validate iterationInput is a number.
-     /* if(isNaN(parseInt($scope.iterationInput))){
-        $scope.errors = "INPUT ERROR: ITERATION INPUT IS NOT A NUMBER.";
-      }*/
-
-      /*//Validate gridH is a number.
-      if(isNaN(parseInt($scope.gridH))){
-        $scope.errors = "INPUT ERROR: GRID WIDTH(X) INPUT IS NOT A NUMBER.";
-      }
-
-      //Validate gridW is a number.
-      if(isNaN(parseInt($scope.gridW))){
-        $scope.errors = "ERROR: GRID HEIGHT(Y) IS NOT A NUMBER.";
-      }
-
-      //Validate grid size.
-      if($scope.gridH > 40 && $scope.gridW > 100){
-        $scope.errors = "GRID ERROR: GRID HAS MAX SIZE OF 40 X 100. Max Size Set";
-        $scope.gridW=100;
-        $scope.gridH=40;
-      }
-      else if($scope.gridH > 40)
-      {
-        $scope.errors = "GRID ERROR: GRID HAS MAX HEIGHT OF 40. Max Height Set";
-        $scope.gridH=40;
-      }
-      else if($scope.gridW > 100)
-      {
-        $scope.errors = "GRID ERROR: GRID HAS MAX WIDTH OF 100. Max Width Set";
-        $scope.gridW=100;
-      }
-      else if($scope.gridW < 1){
-        $scope.errors = "GRID ERROR: GRID HAS MIN WIDTH OF 1. Min Width Set";
-        $scope.gridW=1;
-      }
-      else if($scope.gridH < 1){
-        $scope.errors = "GRID ERROR: GRID HAS MIN HEIGHT OF 1. Min Width Set";
-        $scope.gridH=1;
-      }*/
-      
+	  //Validate gridH is a number.
       if(isNaN(parseInt($scope.gridH)) || ($scope.gridH % 1 !==0)){
         $scope.errors = "GRID ERROR: GRID HEIGHT(Y) MUST BE INT IN RANGE [1,40]. GRID WIDTH(X) MUST BE INT IN RANGE [1,100] Default Set.";
         $scope.gridW=15;
@@ -414,7 +375,6 @@
 
       //Helper function to process whether a cell should be alive or dead.
       function newCellState(previousBoard,x,y){
-
         var oldCell = previousBoard[y][x];
         var newCell = cell.createNew(oldCell.position, {isAlive: oldCell.isAlive});
         var neighbors = newCell.getAliveNeighbors(previousBoard);
