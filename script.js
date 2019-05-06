@@ -60,13 +60,14 @@
                   tooManyCoords = 1;
                 }
               }
-              var x = parseInt(word[0], 10);
-              var y = parseInt(word[1], 10);
 
-              //If the tokens do not parse as ints, abort.
-              if(x % 1 != 0 || y % 1 != 0) {
+              //If the tokens do not mod by 1 to 0, abort
+              if(word[0] % 1 !== 0 || word[1] % 1 !== 0) {
                 nanError = 1;
               }
+              
+              var x = parseInt(word[0], 10);
+              var y = parseInt(word[1], 10);
 
               //If out of bounds of the grid, abort.
               if ($scope.gridH > x + 1 && $scope.gridW > y + 1 && 
@@ -86,7 +87,7 @@
           } else if(nanError){
             reset();
             $scope.$apply(function() {
-              $scope.errors = "FILE ERROR: FILE CONTAINS NON-COORDINATE VALUES";
+              $scope.errors = "FILE ERROR: FILE CONTAINS NON-INTEGER VALUES";
             });
           } else if(outOfBounds){
             reset();
